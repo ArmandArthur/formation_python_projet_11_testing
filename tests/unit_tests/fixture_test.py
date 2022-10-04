@@ -1,3 +1,4 @@
+from unittest import mock
 import pytest
 from ...server import app
 
@@ -12,15 +13,10 @@ class TestFixture:
     @pytest.fixture
     def client(self, app):
         with app.test_client() as client:
-            return client
+            yield client
 
     @pytest.fixture
     def test_data_fixture(self):
-        """test_data_fixture
-
-        Returns:
-            dict about dict
-        """
         return {
                     "email_good" : 
                     {
@@ -31,3 +27,21 @@ class TestFixture:
                         "email" : "john@simplylift"
                     }
                 }
+    @pytest.fixture
+    def test_mocker_club_points_fixture(self):
+        return [
+                {
+                    "name":"Simply Lift",
+                    "email":"john@simplylift.co",
+                    "points":"100"
+                },
+                {
+                    "name":"Iron Temple",
+                    "email": "admin@irontemple.com",
+                    "points":"50"
+                },
+                {   "name":"She Lifts",
+                    "email": "kate@shelifts.co.uk",
+                    "points":"110"
+                }
+            ]
