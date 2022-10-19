@@ -15,11 +15,6 @@ def test_should_response_301_if_email_not_good(fixture_clubs, fixture_emails, mo
     response = client.post("/showSummary", data={'email': fixture_emails['email_not_good']['email']})
     assert response.status_code == 301
 
-# def test_login_logout(fixture_clubs, fixture_emails, mocker, client):
-#     mocker.patch.object(server, "clubs", fixture_clubs)   
-#     response = client.post("/showSummary", data={'email': fixture_emails['email_good']['email']})
-#     response = client.get("/logout")
-#     assert response.status_code == 200
 
 def test_should_have_good_arguments_if_email_good(fixture_clubs, fixture_emails, mocker, client, captured_templates):  
     mocker.patch.object(server, "clubs", fixture_clubs)   
