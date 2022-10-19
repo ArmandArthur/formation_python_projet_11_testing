@@ -18,7 +18,7 @@ def captured_templates(app):
     finally:
         template_rendered.disconnect(record, app)
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def app():
     app = server.app
     app.config.update(({'TESTING': True}))
@@ -49,18 +49,34 @@ def fixture_clubs():
             {
                 "name":"Simply Lift",
                 "email":"john@simplylift.co",
-                "points":"100"
+                "points":"13"
             },
             {
                 "name":"Iron Temple",
                 "email": "admin@irontemple.com",
-                "points":"50"
+                "points":"0"
             },
             {   "name":"She Lifts",
                 "email": "kate@shelifts.co.uk",
-                "points":"110"
+                "points":"30"
             }
         ]
 
 
+@pytest.fixture
+def fixture_competitions():
+    return [
+        {
+            "name": "Spring Festival",
+            "date": "2020-03-27 10:00:00",
+            "numberOfPlaces": "25"
+        },
+        {
+            "name": "Fall Classic",
+            "date": "2020-10-22 13:30:00",
+            "numberOfPlaces": "13"
+        }
+    ]
+            
+        
 
