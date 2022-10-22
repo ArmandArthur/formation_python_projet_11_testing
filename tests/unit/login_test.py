@@ -1,5 +1,5 @@
 from ...server import loadCompetitions, loadClubs
-from ...tests.unit.fixture_test import fixture_emails, fixture_clubs, app, client, captured_templates
+from ..conftest import fixture_emails, fixture_clubs, app, client, captured_templates
 import pytest
 from ... import server
 
