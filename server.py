@@ -1,5 +1,5 @@
 import json, pytest
-import this
+import datetime
 from flask import Flask,render_template,request,redirect,flash,url_for
 
 
@@ -54,6 +54,8 @@ def purchasePlaces():
     club = next((club for club in clubs if club['name'] == request.form['club']), None)
     placesRequired = int(request.form['places'])
 
+
+    points_club = int(club['points'])
     if competition['name'] not in club_points_by_competitons:
         club_points_by_competitons[competition['name']] = {}
 
@@ -63,19 +65,24 @@ def purchasePlaces():
     club_points_by_competitons_before_purchase = club_points_by_competitons[competition['name']][club['name']]
     club_points_by_competitons[competition['name']][club['name']] += placesRequired
     club_points_by_competitons_after_purchase = club_points_by_competitons[competition['name']][club['name']]
-
-    points_club = int(club['points'])
-    if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired:
+    
+    date_competition = datetime.datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
+    date_now = datetime.datetime.now()
+    if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired and date_competition > date_now:   
             competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_after_purchase
             flash('Great-booking complete!')
+    elif(date_competition < date_now): 
+        club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
+        flash('Date competition expired')
     elif points_club < placesRequired:
             flash('Not enought points', 'warning')
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
     else:
         # Remet dans l'état initial si test pas concluant
-        flash('Max points is 12 for a club in a competition', 'warning')
+        flash('Max points is 12 for a club in a competition')
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
+
     return render_template('welcome.html', club=club, competitions=competitions)
 
 

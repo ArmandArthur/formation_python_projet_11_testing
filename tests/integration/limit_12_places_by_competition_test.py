@@ -1,5 +1,5 @@
 from ...server import loadCompetitions, loadClubs
-from .fixture_test import fixture_clubs, fixture_competitions, fixture_club_points_by_competitions, app, client, captured_templates
+from ..conftest import fixture_clubs, fixture_competitions, fixture_club_points_by_competitions, app, client, captured_templates
 import pytest
 from ... import server
 import flask
