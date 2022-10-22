@@ -20,6 +20,7 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+club_points_by_competitons = {}
 
 @app.route('/')
 def index():
@@ -53,13 +54,28 @@ def purchasePlaces():
     club = next((club for club in clubs if club['name'] == request.form['club']), None)
     placesRequired = int(request.form['places'])
 
+    if competition['name'] not in club_points_by_competitons:
+        club_points_by_competitons[competition['name']] = {}
+
+    if club['name'] not in club_points_by_competitons[competition['name']]:
+        club_points_by_competitons[competition['name']][club['name']] = 0
+    
+    club_points_by_competitons_before_purchase = club_points_by_competitons[competition['name']][club['name']]
+    club_points_by_competitons[competition['name']][club['name']] += placesRequired
+    club_points_by_competitons_after_purchase = club_points_by_competitons[competition['name']][club['name']]
+
     points_club = int(club['points'])
-    if(points_club >= placesRequired):
-        competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
-        flash('Great-booking complete!')
-        
+    if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired:
+            competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
+            club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_after_purchase
+            flash('Great-booking complete!')
+    elif points_club < placesRequired:
+            flash('Not enought points', 'warning')
+            club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
     else:
-        flash('Not enought points', 'warning')
+        # Remet dans l'état initial si test pas concluant
+        flash('Max points is 12 for a club in a competition', 'warning')
+        club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
@@ -68,4 +84,7 @@ def purchasePlaces():
 
 @app.route('/logout')
 def logout():
+    competitions = loadCompetitions()
+    clubs = loadClubs()
+    club_points_by_competitons = {}
     return redirect(url_for('index'))
