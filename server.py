@@ -65,12 +65,13 @@ def purchasePlaces():
     club_points_by_competitons_before_purchase = club_points_by_competitons[competition['name']][club['name']]
     club_points_by_competitons[competition['name']][club['name']] += placesRequired
     club_points_by_competitons_after_purchase = club_points_by_competitons[competition['name']][club['name']]
-    
+
     date_competition = datetime.datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
     date_now = datetime.datetime.now()
     if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired and date_competition > date_now:   
             competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_after_purchase
+            flash('Date competition valid')
             flash('Great-booking complete!')
     elif(date_competition < date_now): 
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
