@@ -1,5 +1,5 @@
 from ...server import loadCompetitions, loadClubs
-from .fixture_test import fixture_clubs, fixture_competitions , app, client, captured_templates
+from .fixture_test import fixture_clubs, fixture_competitions, fixture_club_points_by_competitions, app, client, captured_templates
 import pytest
 from ... import server
 import flask
@@ -14,9 +14,11 @@ def test_purchase_reponse_200(fixture_clubs, fixture_competitions, mocker, clien
     reponse = client.post("/purchasePlaces", data={'places': purchase_places, 'club': club, 'competition': competiton})
     assert reponse.status_code == 200
 
-def test_flash_message_if_not_enought_points_by_club(fixture_clubs, fixture_competitions, mocker, client, captured_templates):  
+def test_flash_message_if_not_enought_points_by_club(fixture_clubs, fixture_competitions,fixture_club_points_by_competitions, mocker, client, captured_templates):  
     mocker.patch.object(server, "clubs", fixture_clubs)   
     mocker.patch.object(server, "competitions", fixture_competitions)
+    mocker.patch.object(server, "club_points_by_competitons", fixture_club_points_by_competitions)
+
     club = 'Simply Lift'
     competiton = 'Spring Festival'
     purchase_places = 50
@@ -25,12 +27,14 @@ def test_flash_message_if_not_enought_points_by_club(fixture_clubs, fixture_comp
     flash_message = 'Not enought points'
     assert flash_message in list(flask.get_flashed_messages())
 
-def test_flash_message_if_enought_points_by_club(fixture_clubs, fixture_competitions, mocker, client, captured_templates):  
+def test_flash_message_if_enought_points_by_club(fixture_clubs, fixture_competitions,fixture_club_points_by_competitions, mocker, client, captured_templates):  
     mocker.patch.object(server, "clubs", fixture_clubs)   
     mocker.patch.object(server, "competitions", fixture_competitions)
+    mocker.patch.object(server, "club_points_by_competitons", fixture_club_points_by_competitions)
+
     club = 'Simply Lift'
     competiton = 'Spring Festival'
-    purchase_places = 5
+    purchase_places = 12
     client.post("/purchasePlaces", data={'places': purchase_places, 'club': club, 'competition': competiton})
     
     flash_message = 'Great-booking complete!'
