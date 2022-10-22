@@ -34,7 +34,7 @@ def test_flash_message_if_enought_points_by_club(fixture_clubs, fixture_competit
 
     club = 'Simply Lift'
     competiton = 'Spring Festival'
-    purchase_places = 12
+    purchase_places = 5
     client.post("/purchasePlaces", data={'places': purchase_places, 'club': club, 'competition': competiton})
     
     flash_message = 'Great-booking complete!'
