@@ -10,7 +10,7 @@
     <ul>
         {% for club in clubs %}
         <li>
-            {{club['name']}} - {{club['points']}}<br />
+            <a href="{{ url_for('changeClub',club_params=club['name']) }}">{{club['name']}}</a> - {{club['points']}}<br />
         </li>
         <hr />
         {% endfor %}

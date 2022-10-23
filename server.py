@@ -36,6 +36,15 @@ def showSummary():
     elif 'email' in club:
         return render_template('welcome.html',club=club,competitions=competitions, clubs=clubs)
 
+@app.route('/changeClub/<club_params>')
+def changeClub(club_params):
+    club = next((club for club in clubs if club['name'] == club_params), None)
+    if club == None:
+        flash('Club no found')
+        return redirect(url_for('index'), code=301)
+    elif 'email' in club:
+        return render_template('welcome.html',club=club,competitions=competitions, clubs=clubs)
+
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
@@ -69,7 +78,7 @@ def purchasePlaces():
 
     date_competition = datetime.datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
     date_now = datetime.datetime.now()
-    if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired and date_competition > date_now:   
+    if int(competition['numberOfPlaces'])-placesRequired >= 0 and club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired and date_competition > date_now:   
             competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_after_purchase
             club['points'] = int(club['points'])-placesRequired
@@ -88,9 +97,10 @@ def purchasePlaces():
             # Remet dans l'état initial si test pas concluant
             flash('Max points is 12 for a club in a competition')
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
-    else:
-        print('arthur')
-        flash('Max points is 12 for a club in a competition')
+
+            
+    elif int(competition['numberOfPlaces'])-placesRequired < 0:
+        flash('No places available')
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
 
     return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
