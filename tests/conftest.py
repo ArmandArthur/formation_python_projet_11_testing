@@ -49,7 +49,7 @@ def fixture_clubs():
             {
                 "name":"Simply Lift",
                 "email":"john@simplylift.co",
-                "points":"13"
+                "points":"1500"
             },
             {
                 "name":"Iron Temple",
@@ -69,12 +69,12 @@ def fixture_competitions():
         {
             "name": "Spring Festival",
             "date": "2023-03-27 10:00:00",
-            "numberOfPlaces": "25"
+            "numberOfPlaces": "20"
         },
         {
             "name": "Spring Festival Past",
             "date": "2020-03-27 10:00:00",
-            "numberOfPlaces": "25"
+            "numberOfPlaces": "20"
         }
     ]
 

@@ -56,6 +56,7 @@ def purchasePlaces():
 
 
     points_club = int(club['points'])
+
     if competition['name'] not in club_points_by_competitons:
         club_points_by_competitons[competition['name']] = {}
 
@@ -71,16 +72,24 @@ def purchasePlaces():
     if club_points_by_competitons_after_purchase <= 12 and placesRequired <= 12 and points_club >= placesRequired and date_competition > date_now:   
             competition['numberOfPlaces']   = int(competition['numberOfPlaces'])-placesRequired
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_after_purchase
+            club['points'] = int(club['points'])-placesRequired
+            flash('Points general updated')
             flash('Date competition valid')
             flash('Great-booking complete!')
     elif(date_competition < date_now): 
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
         flash('Date competition expired')
     elif points_club < placesRequired:
-            flash('Not enought points', 'warning')
+            print(points_club)
+            print(placesRequired)
+            flash('Not enought points')
+            club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase    
+    elif club_points_by_competitons_after_purchase > 12 :
+            # Remet dans l'état initial si test pas concluant
+            flash('Max points is 12 for a club in a competition')
             club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
     else:
-        # Remet dans l'état initial si test pas concluant
+        print('arthur')
         flash('Max points is 12 for a club in a competition')
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
 

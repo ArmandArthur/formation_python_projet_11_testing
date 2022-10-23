@@ -21,7 +21,7 @@ def test_flash_message_if_not_enought_points_by_club(fixture_clubs, fixture_comp
 
     club = 'Simply Lift'
     competiton = 'Spring Festival'
-    purchase_places = 50
+    purchase_places = 1501
     client.post("/purchasePlaces", data={'places': purchase_places, 'club': club, 'competition': competiton})
     
     flash_message = 'Not enought points'
