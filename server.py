@@ -34,7 +34,7 @@ def showSummary():
         flash('Email not found.')
         return redirect(url_for('index'), code=301)
     elif 'email' in club:
-        return render_template('welcome.html',club=club,competitions=competitions)
+        return render_template('welcome.html',club=club,competitions=competitions, clubs=clubs)
 
 @app.route('/book/<competition>/<club>')
 def book(competition,club):
@@ -93,7 +93,7 @@ def purchasePlaces():
         flash('Max points is 12 for a club in a competition')
         club_points_by_competitons[competition['name']][club['name']] = club_points_by_competitons_before_purchase
 
-    return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions, clubs=clubs)
 
 
 # TODO: Add route for points display
