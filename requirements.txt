@@ -10,4 +10,4 @@ pytest-mock==3.9.0
 pytest-flask==1.2.0
 blinker==1.5
 Flask-Testing==0.8.1
-
+locust==1.1.1
